@@ -29,7 +29,8 @@ netlify.toml            Configuración de Netlify
 | Variable | Obligatoria | Valor |
 |---|---|---|
 | `ADMIN_PASSWORD` | Sí | Contraseña del panel, mínimo 10 caracteres (mejor 16 o más). Sin ella el panel responde "no configurado". |
-| `PARTICIPACION_ABIERTA` | No | Pon `si` para votar **sin** códigos. Si no existe, los códigos son obligatorios. |
+| `PARTICIPACION_ABIERTA` | No | Pon `si` para votar **sin** códigos (y poder participar varias veces). Si no existe, los códigos son obligatorios. |
+| `PREMIO_SORTEO` | No | Texto del premio. Por defecto: 9 entradas para los karts. |
 
 3. Vuelve a desplegar (*Deploys → Trigger deploy*) para que se apliquen las variables.
 
@@ -50,6 +51,18 @@ Crea un archivo `.env` con `ADMIN_PASSWORD=...` para probar el panel. `netlify d
 - **Borrar votos**: para limpiar las pruebas antes de abrir la votación. Pide escribir BORRAR.
 
 La contraseña nunca está en el código del navegador: se comprueba en el servidor. El navegador la guarda solo en la pestaña abierta (sessionStorage) y se borra al cerrarla o pulsar *Salir*.
+
+## Sorteo
+
+- Al enviar una jugada aparece «Conseguir mi papeleta». Se piden solo nombre, apellidos y si tiene 14 años o más, más la aceptación de protección de datos (si tiene menos de 14, la autorización de su madre, padre o tutor/a). No se pide correo ni teléfono.
+- Cada jugada da **una** papeleta con número correlativo (0001, 0002…) que se muestra en pantalla. Hay que hacer captura o apuntarlo.
+- En el panel, sección *Sorteo*: elige cuántos premios y suplentes, qué se publica (solo números, o número y nombre con inicial, por ejemplo «Leo R.») y pulsa «Hacer el sorteo». Cada papeleta tiene la misma probabilidad (más jugadas, más opciones), pero una persona (mismo nombre y apellidos, sin importar tildes ni mayúsculas) solo puede salir una vez. Después ya no se admiten papeletas.
+- El panel muestra nombre y apellidos completos de ganadores y suplentes. En la web (`/#sorteo`) nunca aparecen los apellidos completos. Lo publicado se puede cambiar después del sorteo.
+- Para entregar el premio: la persona enseña su número y se comprueba el nombre.
+- «Anular el sorteo» quita el resultado si ha habido un error. «Borrar datos personales del sorteo» elimina nombres y apellidos cuando se hayan entregado los premios; lo publicado en la web se mantiene.
+- **Revisa el texto de protección de datos** (en `public/index.html`, bloque «Información sobre protección de datos») con el Ayuntamiento antes de publicar.
+- Las papeletas se guardan en el almacén `smj-sorteo` de Netlify Blobs, separado de los votos y sin relación con ellos.
+- Para participar varias veces hay que usar `PARTICIPACION_ABIERTA=si`. En ese modo cada jugada repetida también cuenta en los resultados de monedas.
 
 ## Dónde se guardan los votos
 
